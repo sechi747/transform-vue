@@ -54,7 +54,9 @@ const transform = () => {
 
     const type = nodeType[item.value.type];
 
-    const value = type === 'object' || type === 'array' ? JSON.stringify(transValue(type, item.value), null, 2) : transValue(type, item.value);
+    const value = type === 'object' || type === 'array'
+      ? JSON.stringify(transValue(type, item.value), null, 2)
+      : transValue(type, item.value);
 
     const sentence = `const ${key} = ref(${value});`;
 
@@ -93,16 +95,19 @@ const transValue = (type, node, isObjProp = false) => {
   const passedTypes = ['number', 'boolean', 'null', 'undefined'];
   if (passedTypes.includes(type)) {
     return node.value;
-  } if (type === 'string') {
+  }
+  if (type === 'string') {
     return isObjProp ? node.value : `"${node.value}"`;
-  } if (type === 'array') {
+  }
+  if (type === 'array') {
     const arr = [];
     node.elements.forEach((el) => {
       const value = transValue(nodeType[el.type], el, true);
       arr.push(value);
     });
     return arr;
-  } if (type === 'object') {
+  }
+  if (type === 'object') {
     // object
     const obj = {};
     node.properties.forEach((property) => {
@@ -121,15 +126,25 @@ const transValue = (type, node, isObjProp = false) => {
 </script>
 
 <template>
-  <div class="w-1200px h-screen flex justify-between items-center">
-    <div>
-      <textarea v-model="source" cols="50" rows="60"></textarea>
-    </div>
+  <div class="min-w-full min-h-full fcc overflow-hidden bg-gray-50">
+    <div w-1400px fbc>
+      <textarea
+        v-model="source"
+        class="nes-textarea !w-500px h-900px font-sans"
+      ></textarea>
 
-    <button class="btn" @click="transform">transform</button>
+      <button
+        type="button"
+        class="nes-btn is-primary font-semibold font-sans"
+        @click="transform"
+      >
+        transform
+      </button>
 
-    <div>
-      <textarea v-model="result" cols="50" rows="60"></textarea>
+      <textarea
+        v-model="result"
+        class="nes-textarea !w-500px h-900px font-sans"
+      ></textarea>
     </div>
   </div>
 </template>

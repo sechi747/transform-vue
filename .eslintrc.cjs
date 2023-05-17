@@ -19,5 +19,6 @@ module.exports = {
   rules: {
     'no-use-before-define': 'off',
     'import/no-unresolved': [2, { ignore: ['\\.css$'] }],
+    'import/no-extraneous-dependencies': 'off',
   },
 };

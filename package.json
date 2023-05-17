@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "gogocode": "^1.0.55",
+    "nes.css": "^2.3.0",
     "vue": "^3.2.47"
   },
   "devDependencies": {

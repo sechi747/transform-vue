@@ -7,12 +7,14 @@ specifiers:
   eslint-plugin-import: ^2.25.2
   eslint-plugin-vue: ^9.13.0
   gogocode: ^1.0.55
+  nes.css: ^2.3.0
   unocss: ^0.51.13
   vite: ^4.3.2
   vue: ^3.2.47
 
 dependencies:
   gogocode: 1.0.55_vue@3.3.2
+  nes.css: 2.3.0
   vue: 3.3.2
 
 devDependencies:
@@ -1928,6 +1930,11 @@ packages:
   /natural-compare/1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
+
+  /nes.css/2.3.0:
+    resolution: {integrity: sha512-lCFZs9vj3f5RVdbvTL/kSxiYsOARwSeAdJaMNo+bCgmWOO9x8ay7QpT4yQVKHy3r5Dttzd0uqVdpt3fvvx6EpQ==}
+    engines: {node: 10.x}
+    dev: false
 
   /node-fetch-native/1.1.1:
     resolution: {integrity: sha512-9VvspTSUp2Sxbl+9vbZTlFGq9lHwE8GDVVekxx6YsNd1YH59sb3Ba8v3Y3cD8PkLNcileGGcA21PFjVl0jzDaw==}

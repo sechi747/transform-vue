@@ -7,7 +7,7 @@ import {
   presetWebFonts,
   transformerDirectives,
   transformerVariantGroup,
-} from 'unocss'
+} from 'unocss';
 
 export default defineConfig({
   shortcuts: [
@@ -71,7 +71,7 @@ export default defineConfig({
     }),
     presetTypography({
       cssExtend: {
-        'a': {
+        a: {
           'text-decoration-thickness': '0.1em;',
           'text-underline-offset': '0.15em;',
           'text-decoration-color': 'rgba(38, 166, 154,0.7);',
@@ -79,10 +79,10 @@ export default defineConfig({
         'a:hover': {
           'text-decoration-color': 'rgba(38, 166, 154,1);',
         },
-        'pre': {
+        pre: {
           background: '#23272d !important',
         },
-        'blockquote': {
+        blockquote: {
           'border-left': '0.25em solid rgb(38, 166, 154)',
         },
       },
@@ -99,4 +99,4 @@ export default defineConfig({
     transformerDirectives(),
     transformerVariantGroup(),
   ],
-})
+});
