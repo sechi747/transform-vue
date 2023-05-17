@@ -22,10 +22,11 @@ const source = ref(`
       nullData: null,
       undefinedData: undefined,
       numberData: 42,
-      experimentId: '',
+      emptyString: '',
       // 这是一个
       // 复杂对象
-      customerId: {
+      complexObject: {
+        nullable: null,
         name: 'sechi',
         age: 23,
         address: {
@@ -34,6 +35,7 @@ const source = ref(`
         },
         cats: ['mercy', 42, {t: 1}, ['adc', 'jungle']]
       }, // 复杂对象行内注释
+      arrayData: [42, 'sechi', null]
     }
   }
 `);
@@ -52,16 +54,18 @@ const transform = () => {
 
     const type = nodeType[item.value.type];
 
-    const value = transValue(type, item.value);
+    const value = type === 'object' || type === 'array' ? JSON.stringify(transValue(type, item.value), null, 2) : transValue(type, item.value);
 
     const sentence = `const ${key} = ref(${value});`;
 
     const comments = handleComment(item.comments);
 
     if (comments.length > 0) {
-      comments.forEach((c) => {
+      comments.forEach((c, index) => {
         if (c.isLeading) {
           transformResult += `${c.content}\n`;
+          // 只存在leading注释
+          if (index === comments.length - 1) transformResult += `${sentence}\n`;
         } else {
           transformResult += `${sentence} ${c.content}\n`;
         }
@@ -110,7 +114,7 @@ const transValue = (type, node, isObjProp = false) => {
       );
       obj[key] = value;
     });
-    return JSON.stringify(obj, null, 2);
+    return obj;
   }
   throw new Error(`unreached type: ${type}. NodeInfo: ${node}`);
 };
