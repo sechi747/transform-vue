@@ -20,5 +20,6 @@ module.exports = {
     'no-use-before-define': 'off',
     'import/no-unresolved': [2, { ignore: ['\\.css$'] }],
     'import/no-extraneous-dependencies': 'off',
+    'linebreak-style': 'off',
   },
 };

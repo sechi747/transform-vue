@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import $ from 'gogocode';
+import CodeArea from './components/codeArea.vue';
 
 const nodeType = {
   ObjectExpression: 'object',
@@ -13,8 +14,8 @@ const nodeType = {
   ArrayExpression: 'array',
 };
 
-const source = ref(`
-  function data() {
+const source = ref(
+  `function data() {
     return {
       stringData: 'abc',
       booleanData: false, // 布尔值
@@ -37,10 +38,14 @@ const source = ref(`
       }, // 复杂对象行内注释
       arrayData: [42, 'sechi', null]
     }
-  }
-`);
+  }`,
+);
 
 const result = ref('');
+
+const clearText = () => {
+
+};
 
 const transform = () => {
   const ast = $(source.value, { isProgram: false });
@@ -128,23 +133,16 @@ const transValue = (type, node, isObjProp = false) => {
 <template>
   <div class="min-w-full min-h-full fcc overflow-hidden bg-gray-50">
     <div w-1400px fbc>
-      <textarea
-        v-model="source"
-        class="nes-textarea !w-500px h-900px font-sans"
-      ></textarea>
+      <CodeArea v-model="source" />
 
       <button
-        type="button"
         class="nes-btn is-primary font-semibold font-sans"
         @click="transform"
       >
         transform
       </button>
 
-      <textarea
-        v-model="result"
-        class="nes-textarea !w-500px h-900px font-sans"
-      ></textarea>
+      <CodeArea v-model="result" />
     </div>
   </div>
 </template>
