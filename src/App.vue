@@ -1,16 +1,16 @@
 <script setup>
-import { ref } from "vue";
-import $ from "gogocode";
+import { ref } from 'vue';
+import $ from 'gogocode';
 
 const nodeType = {
-  "ObjectExpression": "object",
-  ObjectProperty: "object",
-  StringLiteral: "string",
-  BooleanLiteral: "boolean",
-  NullLiteral: "null",
-  Identifier: "undefined",
-  NumericLiteral: "number",
-  ArrayExpression: "array",
+  ObjectExpression: 'object',
+  ObjectProperty: 'object',
+  StringLiteral: 'string',
+  BooleanLiteral: 'boolean',
+  NullLiteral: 'null',
+  Identifier: 'undefined',
+  NumericLiteral: 'number',
+  ArrayExpression: 'array',
 };
 
 const source = ref(`
@@ -38,14 +38,14 @@ const source = ref(`
   }
 `);
 
-const result = ref("");
+const result = ref('');
 
 const transform = () => {
   const ast = $(source.value, { isProgram: false });
 
-  const returnVal = ast.find("function data() { return $_$1 }");
+  const returnVal = ast.find('function data() { return $_$1 }');
 
-  let transformResult = "";
+  let transformResult = '';
 
   returnVal.match[1][0].node.properties.forEach((item) => {
     const key = item.key.name;
@@ -86,19 +86,19 @@ const handleComment = (commentsArr) => {
 };
 
 const transValue = (type, node, isObjProp = false) => {
-  const arr = ["number", "boolean", "null", "undefined"];
-  if (arr.includes(type)) {
+  const passedTypes = ['number', 'boolean', 'null', 'undefined'];
+  if (passedTypes.includes(type)) {
     return node.value;
-  } else if (type === "string") {
+  } if (type === 'string') {
     return isObjProp ? node.value : `"${node.value}"`;
-  } else if (type === "array") {
+  } if (type === 'array') {
     const arr = [];
     node.elements.forEach((el) => {
       const value = transValue(nodeType[el.type], el, true);
       arr.push(value);
     });
     return arr;
-  } else if(type === "object") {
+  } if (type === 'object') {
     // object
     const obj = {};
     node.properties.forEach((property) => {
@@ -106,14 +106,13 @@ const transValue = (type, node, isObjProp = false) => {
       const value = transValue(
         nodeType[property.value.type],
         property.value,
-        true
+        true,
       );
       obj[key] = value;
     });
     return JSON.stringify(obj, null, 2);
-  } else {
-    throw new Error(`unreached type: ${type}. NodeInfo: ${node}`)
   }
+  throw new Error(`unreached type: ${type}. NodeInfo: ${node}`);
 };
 </script>
 
