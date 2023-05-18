@@ -43,10 +43,6 @@ const source = ref(
 
 const result = ref('');
 
-const clearText = () => {
-
-};
-
 const transform = () => {
   const ast = $(source.value, { isProgram: false });
 
