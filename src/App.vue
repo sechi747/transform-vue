@@ -15,7 +15,7 @@ const nodeType = {
 };
 
 const source = ref(
-  `function data() {
+  `data() {
     return {
       stringData: 'abc',
       booleanData: false, // 布尔值
@@ -46,7 +46,7 @@ const result = ref('');
 const transform = () => {
   const ast = $(source.value, { isProgram: false });
 
-  const returnVal = ast.find('function data() { return $_$1 }');
+  const returnVal = ast.find('return $_$1');
 
   let transformResult = '';
 
