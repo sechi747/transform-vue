@@ -3,15 +3,18 @@ import { ref } from 'vue';
 import $ from 'gogocode';
 import CodeArea from './components/codeArea.vue';
 
+// TODO 待移除
 const nodeType = {
   ObjectExpression: 'object',
   ObjectProperty: 'object',
   StringLiteral: 'string',
   BooleanLiteral: 'boolean',
   NullLiteral: 'null',
-  Identifier: 'undefined',
+  Identifier: 'identifier',
   NumericLiteral: 'number',
   ArrayExpression: 'array',
+  MemberExpression: 'memberExp',
+  ThisExpression: 'thisExp',
 };
 
 const source = ref(
@@ -36,7 +39,11 @@ const source = ref(
         },
         cats: ['mercy', 42, {t: 1}, ['adc', 'jungle']]
       }, // 复杂对象行内注释
-      arrayData: [42, 'sechi', null]
+      arrayData: [42, 'sechi', null],
+      // various variables
+      scopeData: this.person.age,
+      objectVariable: video.author.name,
+      singleVariable: IMPORT_DATA
     }
   }`,
 );
@@ -93,7 +100,7 @@ const handleComment = (commentsArr) => {
 };
 
 const transValue = (type, node, isObjProp = false) => {
-  const passedTypes = ['number', 'boolean', 'null', 'undefined'];
+  const passedTypes = ['number', 'boolean', 'null'];
   if (passedTypes.includes(type)) {
     return node.value;
   }
@@ -122,7 +129,30 @@ const transValue = (type, node, isObjProp = false) => {
     });
     return obj;
   }
+  if (type === 'memberExp') {
+    const object = handleMemberExp(node);
+    return object;
+  }
+  if (type === 'identifier') {
+    return node.name;
+  }
   throw new Error(`unreached type: ${type}. NodeInfo: ${node}`);
+};
+
+const handleMemberExp = (node) => {
+  let value = '';
+  const curObject = node.object;
+  if (curObject.type === 'MemberExpression') {
+    const headPice = handleMemberExp(curObject);
+    const curPiece = `.${node.property.name}`;
+    value = headPice + curPiece;
+    return value;
+  }
+  // 根对象
+  if (curObject.type === 'ThisExpression') {
+    return `this.${node.property.name}`;
+  }
+  return `${curObject.name}.${node.property.name}`;
 };
 </script>
 
