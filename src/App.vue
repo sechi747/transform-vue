@@ -51,41 +51,44 @@ const source = ref(
 const result = ref('');
 
 const transform = () => {
-  const ast = $(source.value, { isProgram: false });
-
-  const returnVal = ast.find('return $_$1');
-
   let transformResult = '';
+  try {
+    const ast = $(source.value, { isProgram: false });
 
-  returnVal.match[1][0].node.properties.forEach((item) => {
-    const key = item.key.name;
+    const returnVal = ast.find('return $_$1');
 
-    const type = nodeType[item.value.type];
+    returnVal.match[1][0].node.properties.forEach((item) => {
+      const key = item.key.name;
 
-    const value = type === 'object' || type === 'array'
-      ? JSON.stringify(transValue(type, item.value), null, 2)
-      : transValue(type, item.value);
+      const type = nodeType[item.value.type];
 
-    const sentence = `const ${key} = ref(${value});`;
+      const value = type === 'object' || type === 'array'
+        ? JSON.stringify(transValue(type, item.value), null, 2)
+        : transValue(type, item.value);
 
-    const comments = handleComment(item.comments);
+      const sentence = `const ${key} = ref(${value});`;
 
-    if (comments.length > 0) {
-      comments.forEach((c, index) => {
-        if (c.isLeading) {
-          transformResult += `${c.content}\n`;
-          // 只存在leading注释
-          if (index === comments.length - 1) transformResult += `${sentence}\n`;
-        } else {
-          transformResult += `${sentence} ${c.content}\n`;
-        }
-      });
-    } else {
-      transformResult += `${sentence}\n`;
-    }
-  });
+      const comments = handleComment(item.comments);
 
-  result.value = transformResult;
+      if (comments.length > 0) {
+        comments.forEach((c, index) => {
+          if (c.isLeading) {
+            transformResult += `${c.content}\n`;
+            // 只存在leading注释
+            if (index === comments.length - 1) transformResult += `${sentence}\n`;
+          } else {
+            transformResult += `${sentence} ${c.content}\n`;
+          }
+        });
+      } else {
+        transformResult += `${sentence}\n`;
+      }
+    });
+    result.value = transformResult;
+  } catch (err) {
+    result.value = err;
+    throw new Error(err);
+  }
 };
 
 const handleComment = (commentsArr) => {
